@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/store/appStore';
 
@@ -18,6 +18,16 @@ const mainNavItems: SideNavItem[] = [
   { name: 'Players',       path: '/players',      icon: 'person' },
   { name: 'Analytics',     path: '/analytics',    icon: 'analytics' },
   { name: 'Leaderboard',   path: '/leaderboard',  icon: 'leaderboard' },
+];
+
+interface ExternalSideNavItem {
+  name: string;
+  href: string;
+  icon: string;
+}
+
+const externalNavItems: ExternalSideNavItem[] = [
+  { name: 'Live Matches', href: '/live-matches', icon: 'live_tv' },
 ];
 
 export const Sidebar: React.FC = () => {
@@ -88,6 +98,46 @@ export const Sidebar: React.FC = () => {
 
         {/* ── Main Navigation ───────────────────────────── */}
         <nav className="flex-grow space-y-0.5 overflow-y-auto no-scrollbar px-2">
+          {/* External HTML page links */}
+          {externalNavItems.map((item) => (
+            <Link
+              key={item.href}
+              to={item.href}
+              title={isSidebarCollapsed ? item.name : undefined}
+              className={cn(
+                'flex items-center gap-3.5 px-3 py-2.5 rounded-xl',
+                'transition-all duration-200 cursor-pointer group relative',
+                isSidebarCollapsed ? 'justify-center' : '',
+                location.pathname === item.href
+                  ? 'bg-[#006c40]/20 text-[#72db9d] border-l-4 border-[#72db9d] pl-2'
+                  : 'text-white/55 hover:text-white hover:bg-white/8 border-l-4 border-transparent'
+              )}
+              onClick={() => setMobileSidebarOpen(false)}
+            >
+              <span
+                className={cn(
+                  'material-symbols-outlined text-[20px] flex-shrink-0 transition-all duration-200',
+                  location.pathname === item.href ? 'text-[#72db9d]' : 'group-hover:text-white'
+                )}
+                style={location.pathname === item.href ? { fontVariationSettings: "'FILL' 1" } : undefined}
+              >
+                {item.icon}
+              </span>
+
+              {!isSidebarCollapsed && (
+                <span className={cn('text-[13px] font-medium truncate transition-all duration-200',
+                  location.pathname === item.href ? 'font-semibold' : '')}>
+                  {item.name}
+                </span>
+              )}
+
+              {isSidebarCollapsed && (
+                <div className="absolute left-full ml-3 px-3 py-1.5 bg-[#1e293b] text-white text-[12px] font-medium rounded-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-xl z-50 border border-white/10">
+                  {item.name}
+                </div>
+              )}
+            </Link>
+          ))}
           {mainNavItems.map((item) => {
             const isActive = location.pathname === item.path ||
               location.pathname.startsWith(item.path + '/');
