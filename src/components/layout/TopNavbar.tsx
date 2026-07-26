@@ -63,7 +63,9 @@ export const TopNavbar: React.FC = () => {
   const pageTitle = usePageTitle();
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const sidebarOffset = isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-60';
+  const isFullWidth = ['/', '/login', '/register', '/forgot-password'].includes(location.pathname);
+
+  const sidebarOffset = isFullWidth ? '' : (isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-60');
 
   return (
     <header
@@ -87,14 +89,16 @@ export const TopNavbar: React.FC = () => {
           </button>
 
           {/* SmartSportz wordmark (top bar on mobile / when sidebar collapsed) */}
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 group"
-          >
-            <span className="hidden sm:block text-[18px] font-bold text-[#006c40] tracking-tight leading-none">
-              SmartSportz.in
-            </span>
-          </button>
+          {(isFullWidth || isSidebarCollapsed) && (
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2 group animate-fadeIn"
+            >
+              <span className="hidden sm:block text-[18px] font-bold text-[#006c40] tracking-tight leading-none">
+                SmartSportz.in
+              </span>
+            </button>
+          )}
 
           {/* Separator + Page breadcrumb */}
           <div className="hidden md:flex items-center gap-2 text-[#bdcabe]">

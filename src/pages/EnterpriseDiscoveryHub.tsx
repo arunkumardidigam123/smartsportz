@@ -60,7 +60,11 @@ const tournaments = [
   },
 ];
 
-export const EnterpriseDiscoveryHub: React.FC = () => {
+export interface EnterpriseDiscoveryHubProps {
+  isInline?: boolean;
+}
+
+export const EnterpriseDiscoveryHub: React.FC<EnterpriseDiscoveryHubProps> = ({ isInline = false }) => {
   const [search, setSearch] = useState('');
   const [sport, setSport] = useState('All Sports');
   const [city, setCity] = useState('All Cities');
@@ -75,19 +79,31 @@ export const EnterpriseDiscoveryHub: React.FC = () => {
   });
 
   return (
-    <div className="bg-[#f8f9ff] text-[#0b1c30] min-h-screen pb-20">
+    <div className={isInline ? "" : "bg-[#f8f9ff] text-[#0b1c30] min-h-screen pb-20 pt-6"}>
       {/* Filter & Search Section */}
-      <section className="max-w-[1280px] mx-auto px-10 pt-10 mb-12">
+      <section className={isInline ? "max-w-[1280px] mx-auto mb-12" : "max-w-[1280px] mx-auto px-10 pt-10 mb-12"}>
+        {!isInline && (
+          <Link to="/tournaments" className="inline-flex items-center gap-2 text-[#006c40] font-semibold mb-6 hover:gap-3 transition-all">
+            <span className="material-symbols-outlined text-sm">arrow_back</span>
+            <span>Back to Tournaments</span>
+          </Link>
+        )}
         <div className="flex flex-col gap-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <h1 className="text-[48px] font-bold text-[#0b1c30] mb-2 leading-tight">
-                Upcoming Tournaments
-              </h1>
-              <p className="text-[#3e4a41] max-w-2xl text-[18px]">
-                Discover and register for the elite sporting events across the country. Track your progress and rise through the ranks.
-              </p>
-            </div>
+            {!isInline ? (
+              <div>
+                <h1 className="text-[48px] font-bold text-[#0b1c30] mb-2 leading-tight">
+                  Upcoming Tournaments
+                </h1>
+                <p className="text-[#3e4a41] max-w-2xl text-[18px]">
+                  Discover and register for the elite sporting events across the country. Track your progress and rise through the ranks.
+                </p>
+              </div>
+            ) : (
+              <div>
+                <h2 className="text-[24px] font-bold text-[#0b1c30]">Upcoming Events</h2>
+              </div>
+            )}
             <div className="relative w-full md:w-96 group">
               <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#6e7a70]">search</span>
               <input
@@ -152,7 +168,7 @@ export const EnterpriseDiscoveryHub: React.FC = () => {
       </section>
 
       {/* Tournament Grid */}
-      <section className="max-w-[1280px] mx-auto px-10">
+      <section className={isInline ? "max-w-[1280px] mx-auto" : "max-w-[1280px] mx-auto px-10"}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map(t => (
             <div key={t.id} className="bg-white rounded-[18px] overflow-hidden shadow-md group flex flex-col hover:-translate-y-1 transition-transform duration-300">

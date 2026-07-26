@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface LiveMatch {
   id: string;
@@ -54,7 +55,7 @@ const liveMatches: LiveMatch[] = [
     watching: '25k',
     pool: '₹10L',
     progress: 92,
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA_bQbNZO3K8574cg-9-iIfGGRyQfPTJp-xTlR7YJLxJgx6Do0c3p5cWtP06-Ldm787qqV03C3Fb19qsV6s2DJQwqWZW6HlSoShgsIzr5o1ZRgOcm1yv3wWqdpdH8lFh6DRK_9zBZWMGTHJb1jJsq09jpqLc8OlQTWLJ2LZZ0dVfA3CduSfCzzPaSjyCoCFnOy7sBko9uPbPjVcY1bCxisn27R4I9a2kohMllRZRlmHNNMZ3ej-sUPGUr7JzMdg_Hp5s3aYz-hs8WDf',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXu_bQbNZO3K8574cg-9-iIfGGRyQfPTJp-xTlR7YJLxJgx6Do0c3p5cWtP06-Ldm787qqV03C3Fb19qsV6s2DJQwqWZW6HlSoShgsIzr5o1ZRgOcm1yv3wWqdpdH8lFh6DRK_9zBZWMGTHJb1jJsq09jpqLc8OlQTWLJ2LZZ0dVfA3CduSfCzzPaSjyCoCFnOy7sBko9uPbPjVcY1bCxisn27R4I9a2kohMllRZRlmHNNMZ3ej-sUPGUr7JzMdg_Hp5s3aYz-hs8WDf',
   },
   {
     id: '3',
@@ -94,25 +95,45 @@ const liveMatches: LiveMatch[] = [
   },
 ];
 
-export const LiveTournamentsHub: React.FC = () => {
+export interface LiveTournamentsHubProps {
+  isInline?: boolean;
+}
+
+export const LiveTournamentsHub: React.FC<LiveTournamentsHubProps> = ({ isInline = false }) => {
   return (
-    <div className="bg-[#f8f9ff] text-[#0b1c30] min-h-screen pb-20">
-      <section className="max-w-[1280px] mx-auto px-6 md:px-10 pt-10 pb-20">
+    <div className={isInline ? "" : "bg-[#f8f9ff] text-[#0b1c30] min-h-screen pb-20 pt-6"}>
+      <section className={isInline ? "max-w-[1280px] mx-auto pb-12" : "max-w-[1280px] mx-auto px-6 md:px-10 pt-10 pb-20"}>
+        {!isInline && (
+          <Link to="/tournaments" className="inline-flex items-center gap-2 text-[#006c40] font-semibold mb-6 hover:gap-3 transition-all">
+            <span className="material-symbols-outlined text-sm">arrow_back</span>
+            <span>Back to Tournaments</span>
+          </Link>
+        )}
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div className="space-y-2">
-            <h1 className="text-[40px] md:text-[48px] font-bold text-[#0b1c30]">
-              🏆 Live Tournaments
-            </h1>
-            <p className="text-[18px] text-[#3e4a41]">
-              Follow live tournaments happening across India in real time.
-            </p>
+        {!isInline ? (
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div className="space-y-2">
+              <h1 className="text-[40px] md:text-[48px] font-bold text-[#0b1c30]">
+                🏆 Live Tournaments
+              </h1>
+              <p className="text-[18px] text-[#3e4a41]">
+                Follow live tournaments happening across India in real time.
+              </p>
+            </div>
+            <div className="flex items-center gap-3 bg-red-50 px-4 py-2 rounded-full border border-red-100 self-start md:self-auto">
+              <span className="w-3 h-3 bg-red-500 rounded-full animate-ping" />
+              <span className="text-red-600 font-bold text-[12px] tracking-widest">LIVE NOW</span>
+            </div>
           </div>
-          <div className="flex items-center gap-3 bg-red-50 px-4 py-2 rounded-full border border-red-100 self-start md:self-auto">
-            <span className="w-3 h-3 bg-red-500 rounded-full animate-ping" />
-            <span className="text-red-600 font-bold text-[12px] tracking-widest">LIVE NOW</span>
+        ) : (
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-[24px] font-bold text-[#0b1c30]">Live Matches Center</h2>
+            <div className="flex items-center gap-2 bg-red-50 px-3 py-1 rounded-full border border-red-100">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
+              <span className="text-red-600 font-bold text-[10px] tracking-widest">LIVE</span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Horizontal Scroll Cards */}
         <div className="relative group">

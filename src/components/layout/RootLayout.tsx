@@ -6,7 +6,7 @@ import { useAppStore } from '@/store/appStore';
 import { cn } from '@/utils/cn';
 
 /** Pages that hide the sidebar (full-width layout) */
-const FULL_WIDTH_ROUTES = ['/', '/login', '/register'];
+const FULL_WIDTH_ROUTES = ['/', '/login', '/register', '/forgot-password'];
 
 export const RootLayout: React.FC = () => {
   const { isSidebarCollapsed } = useAppStore();
