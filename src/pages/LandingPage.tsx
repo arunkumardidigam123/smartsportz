@@ -1,395 +1,385 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const sports = [
-  { name: 'Football',    icon: 'sports_soccer' },
-  { name: 'Cricket',     icon: 'sports_cricket' },
-  { name: 'Basketball',  icon: 'sports_basketball' },
-  { name: 'Badminton',   icon: 'sports_tennis' },
-  { name: 'Volleyball',  icon: 'sports_volleyball' },
-  { name: 'Hockey',      icon: 'sports_hockey' },
-  { name: 'Tennis',      icon: 'sports_tennis' },
-];
-
-const featuredTournaments = [
-  {
-    id: '1',
-    name: 'National Collegiate Cup 2024',
-    sport: 'Football',
-    status: 'REGISTRATION_OPEN',
-    teams: 24, maxTeams: 32,
-    startDate: 'Aug 20, 2024',
-    location: 'New Delhi',
-    gradient: 'from-[#006c40] to-[#0b8852]',
-  },
-  {
-    id: '2',
-    name: 'Corporate Premier League',
-    sport: 'Cricket',
-    status: 'LIVE',
-    teams: 16, maxTeams: 16,
-    startDate: 'Jul 15, 2024',
-    location: 'Mumbai',
-    gradient: 'from-[#081C3A] to-[#0d2a52]',
-  },
-  {
-    id: '3',
-    name: 'All India Open Badminton',
-    sport: 'Badminton',
-    status: 'UPCOMING',
-    teams: 8, maxTeams: 64,
-    startDate: 'Sep 5, 2024',
-    location: 'Bangalore',
-    gradient: 'from-[#00522f] to-[#006c40]',
-  },
-];
-
-const features = [
-  { icon: 'leaderboard',      title: 'Live Real-Time Scores',       desc: 'Instant score updates for cricket, football, and 15+ other sports.' },
-  { icon: 'how_to_reg',       title: 'Online Registration',          desc: 'Streamlined digital onboarding for teams, players, and officials.' },
-  { icon: 'payments',         title: 'Seamless Payments',            desc: 'Integrated Razorpay and UPI payment gateway with automated invoicing.' },
-  { icon: 'manage_accounts',  title: 'Player Management',            desc: 'Build and manage detailed player profiles with performance history.' },
-  { icon: 'analytics',        title: 'Deep Analytics',               desc: 'Comprehensive data visualization for organizers, coaches, and fans.' },
-  { icon: 'auto_awesome',     title: 'Tournament Automations',       desc: 'Auto-generate fixtures, update brackets, and send notifications.' },
-];
-
-const testimonials = [
-  {
-    name: 'Rahul Sharma',  role: 'Tournament Director, State Football Assoc.',
-    text: 'SmartSportz made organizing our state-level cricket tournament incredibly easy. The automated fixture generation and live score updates kept everyone engaged like never before.',
-    rating: 5,
-  },
-  {
-    name: 'Priya Venkat',  role: 'Player, National Badminton Circuit',
-    text: 'As a player, being able to see my stats and upcoming match schedule on a single dashboard is a game changer. The professional feel of the platform is truly top-notch.',
-    rating: 5,
-  },
-];
-
-const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
-  const map: Record<string, string> = {
-    LIVE:              'bg-red-500/90 text-white',
-    REGISTRATION_OPEN: 'bg-[#006c40]/90 text-white',
-    UPCOMING:          'bg-[#575e70]/80 text-white',
-  };
-  const label: Record<string, string> = {
-    LIVE:              'LIVE',
-    REGISTRATION_OPEN: 'REGISTRATION OPEN',
-    UPCOMING:          'UPCOMING',
-  };
-  return (
-    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${map[status]}`}>
-      {label[status]}
-    </span>
-  );
-};
-
 export const LandingPage: React.FC = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true;
+      video.play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(err => {
+          console.log('Autoplay blocked:', err);
+          setIsPlaying(false);
+        });
+    }
+  }, []);
+
+  const handlePlayPause = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(err => console.log(err));
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const handleMuteUnmute = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setIsMuted(video.muted);
+    if (!video.muted) {
+      video.volume = 0.5;
+    }
+  };
+
   return (
-    <div className="bg-[#f7f9fb]">
+    <div className="bg-[#f8f9ff] text-[#0b1c30] font-sans min-h-screen">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden flex flex-col">
+        {/* Hero Video Banner */}
+        <div className="relative w-full aspect-video bg-black overflow-hidden group">
+          <video
+            ref={videoRef}
+            id="hero-bg-video"
+            className="w-full h-full object-cover opacity-90"
+            autoPlay
+            muted
+            loop
+            playsInline
+          >
+            <source src="/IMG_5480.MOV" type="video/quicktime" />
+            <source src="/IMG_5480.MOV" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
 
-      {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-[88vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#081C3A]/92 via-[#081C3A]/65 to-transparent z-10" />
-          <img
-            className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVTXetmIHCyTB42wZsqkjW_sjJwIPW-DLAjnUQ_kNrAgGSUdrU7G_MNNLLgbu-9GUMiq_fJO6iNS0ONjfDowFkgB53en0RPjIYQnPAYfbyeRAPCG6YkdpyhTAnOSqORiJfwFpRbrnPBr3lpMEl1eq9jwvnCBP0hzJQ83CX39ezx29Jemg2r9bFBvRDr-LGfRJUrq1npM5ot-uTTVyiRmmRYF5JQSxixcpwosrRKgunUT_wbMZbyh-5hzJsqAzTZc0s1NxPbpIZaEby"
-            alt="SmartSportz Hero — Indian sports stadium"
-          />
+          {/* Bottom Right Controls */}
+          <div className="absolute bottom-6 right-6 z-20 flex items-center gap-3">
+            <button
+              onClick={handlePlayPause}
+              className="h-12 w-12 rounded-full bg-[#006c40]/95 text-white flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined">
+                {isPlaying ? 'pause' : 'play_arrow'}
+              </span>
+            </button>
+            <button
+              onClick={handleMuteUnmute}
+              className="h-12 w-12 rounded-full bg-[#e5eeff]/80 backdrop-blur-md text-[#006c40] flex items-center justify-center shadow-lg hover:bg-[#dce9ff] transition-all hover:scale-105 active:scale-95"
+            >
+              <span className="material-symbols-outlined">
+                {isMuted ? 'volume_off' : 'volume_up'}
+              </span>
+            </button>
+          </div>
         </div>
-        <div className="relative z-20 max-w-[1440px] mx-auto px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-20">
-          <div className="space-y-7 max-w-2xl">
-            <span className="inline-block py-1.5 px-4 bg-[#8ef8b7]/15 border border-[#8ef8b7]/25 rounded-full text-[#8ef8b7] text-[12px] font-semibold uppercase tracking-wider">
-              India's Leading Sports Tech
-            </span>
-            <h1 className="text-white font-black text-[58px] leading-[1.08] tracking-tight">
-              India's Smart Tournament{' '}
-              <span className="text-[#72db9d]">Management Platform</span>
+
+        {/* Hero Content Grid */}
+        <div className="relative z-20 max-w-[1280px] mx-auto px-10 w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center py-16 md:py-24">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0b8852]/10 text-[#006c40] text-[12px] font-semibold border border-[#0b8852]/20">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#006c40] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#006c40]"></span>
+              </span>
+              The New Standard in Sports Tech
+            </div>
+            <h1 className="text-[48px] font-bold text-[#0b1c30] leading-tight">
+              Elevate Your <span className="text-[#006c40]">Tournament Management</span>
             </h1>
-            <p className="text-white/75 text-[18px] leading-relaxed max-w-xl">
-              Discover elite tournaments, register your team with ease, manage
-              multi-sport events seamlessly, and track every point with real-time
-              live scores.
+            <p className="text-[18px] text-[#3e4a41] max-w-lg">
+              A high-fidelity platform designed for elite athletic organizations to streamline operations, engage fans, and scale championships with surgical precision.
             </p>
-            <div className="flex flex-wrap gap-4 pt-2">
+            <div className="flex flex-wrap gap-4">
               <Link
-                to="/tournaments"
-                className="px-8 py-3.5 bg-[#0b8852] text-white rounded-xl font-bold text-[15px] hover:bg-[#006c40] hover:shadow-lg hover:shadow-[#006c40]/25 transition-all active:scale-95"
+                to="/register"
+                className="bg-[#006c40] text-white px-8 py-4 rounded-lg font-bold shadow-lg hover:bg-[#0b8852] hover:-translate-y-0.5 transition-all text-[14px]"
               >
-                Explore Tournaments
+                Get Started
               </Link>
-              <Link
-                to="/tournaments/create"
-                className="px-8 py-3.5 border-2 border-white/30 text-white rounded-xl font-bold text-[15px] hover:bg-white/10 backdrop-blur-sm transition-all active:scale-95"
+              <button
+                onClick={() => alert('Demo video coming soon!')}
+                className="bg-[#eff4ff] text-[#006c40] border border-[#bdcabe] px-8 py-4 rounded-lg font-bold hover:bg-[#e5eeff] transition-all flex items-center gap-2 text-[14px]"
               >
-                Register Tournament
-              </Link>
+                <span className="material-symbols-outlined">play_circle</span>
+                Watch Demo
+              </button>
             </div>
-            {/* Stats row */}
-            <div className="flex gap-8 pt-4">
-              {[
-                { val: '1,200+', label: 'Tournaments' },
-                { val: '50,000+', label: 'Players' },
-                { val: '15+', label: 'Sports' },
-              ].map((s) => (
-                <div key={s.label}>
-                  <p className="text-[26px] font-black text-[#72db9d]">{s.val}</p>
-                  <p className="text-white/55 text-[12px] font-medium">{s.label}</p>
-                </div>
-              ))}
+            <div className="flex items-center gap-6 pt-4 grayscale opacity-60">
+              <div className="w-24 h-8 bg-[#3e4a41]/20 rounded"></div>
+              <div className="w-24 h-8 bg-[#3e4a41]/20 rounded"></div>
+              <div className="w-24 h-8 bg-[#3e4a41]/20 rounded"></div>
             </div>
           </div>
-
-          {/* Hero floating cards (desktop) */}
-          <div className="hidden lg:flex flex-col gap-5 items-end relative">
-            <div className="glass-light p-6 rounded-3xl w-80 shadow-2xl animate-float border border-white/30">
-              <div className="flex justify-between items-center mb-4">
-                <span className="flex items-center gap-2 text-red-500 font-bold text-[11px] uppercase tracking-wider">
-                  <span className="w-2 h-2 rounded-full bg-red-500 live-pulse" />
-                  Live Match
-                </span>
-                <span className="text-[#081C3A]/55 text-[11px] font-semibold">T20 Mumbai Cup</span>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-[10px] text-white font-bold shadow">MI</div>
-                    <span className="font-bold text-[#081C3A] text-[14px]">Mumbai Ind</span>
-                  </div>
-                  <span className="font-black text-[#081C3A]">164/4 (18.2)</span>
+          <div className="hidden md:block relative">
+            {/* Floating Metric Tiles */}
+            <div className="absolute -top-10 -left-10 bg-white/70 backdrop-blur-[12px] border border-white p-6 rounded-2xl shadow-md">
+              <div className="text-[#006c40] text-[24px] font-bold">99.9%</div>
+              <div className="text-[12px] font-semibold text-[#3e4a41] uppercase tracking-wider">Uptime Reliability</div>
+            </div>
+            <div className="absolute -bottom-10 -right-4 bg-white/70 backdrop-blur-[12px] border border-white p-6 rounded-2xl shadow-md">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-[#006c40]/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-[#006c40]">trophy</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-[10px] text-white font-bold shadow">RCB</div>
-                    <span className="font-bold text-[#081C3A] text-[14px]">Royal Chall</span>
-                  </div>
-                  <span className="font-black text-[#081C3A]">Yet to Bat</span>
+                <div>
+                  <div className="text-[24px] font-bold">2.4k+</div>
+                  <div className="text-[12px] text-[#3e4a41]">Tournaments Hosted</div>
                 </div>
               </div>
             </div>
-            <div className="glass-light p-5 rounded-3xl w-72 shadow-2xl mr-16 border border-white/30" style={{ animation: 'float 8s ease-in-out infinite reverse' }}>
-              <div className="flex items-center gap-2.5 mb-3">
-                <span className="material-symbols-outlined text-[#006c40] text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>trophy</span>
-                <span className="font-bold text-[#081C3A] text-[13px]">New Registration</span>
-              </div>
-              <p className="text-[#081C3A]/70 text-[12px] leading-relaxed mb-4">
-                Under-19 State Football Championship registrations are now open for all clubs.
-              </p>
-              <Link to="/tournaments" className="block w-full py-2 bg-[#081C3A] text-white rounded-lg text-[12px] font-bold text-center hover:bg-[#006c40] transition-colors">
-                Apply Now
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Discover Your Sport ──────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1440px] mx-auto px-12">
-          <div className="text-center mb-14">
-            <h2 className="text-[32px] font-bold text-[#081C3A] mb-3">Discover Your Sport</h2>
-            <p className="text-[#4B5563] max-w-2xl mx-auto text-[15px]">
-              From professional championships to local club matches, we support over 15+ sports disciplines across India.
-            </p>
-          </div>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-5">
-            {sports.map((sport) => (
-              <Link
-                key={sport.name}
-                to={`/sports?category=${sport.name.toLowerCase()}`}
-                className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-[#f7f9fb] hover:bg-[#006c40]/8 border border-transparent hover:border-[#006c40]/20 transition-all duration-200 group cursor-pointer active:scale-95"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:bg-[#006c40] transition-colors duration-200">
-                  <span
-                    className="material-symbols-outlined text-[26px] text-[#006c40] group-hover:text-white transition-colors duration-200"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    {sport.icon}
-                  </span>
-                </div>
-                <span className="text-[12px] font-semibold text-[#111827] group-hover:text-[#006c40] transition-colors text-center">
-                  {sport.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Featured Tournaments ─────────────────────────── */}
-      <section className="py-20 bg-[#f7f9fb]">
-        <div className="max-w-[1440px] mx-auto px-12">
-          <div className="flex justify-between items-center mb-10">
-            <div>
-              <h2 className="text-[32px] font-bold text-[#081C3A]">Featured Tournaments</h2>
-              <p className="text-[#4B5563] mt-1 text-[14px]">Register your team and compete at the highest level</p>
-            </div>
-            <Link to="/tournaments" className="flex items-center gap-1.5 text-[#006c40] font-semibold text-[14px] hover:underline">
-              View All
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-            {featuredTournaments.map((t) => (
+            {/* Main Dashboard Preview */}
+            <div className="rounded-2xl overflow-hidden shadow-lg bg-[#f8f9ff] border border-[#bdcabe]/30">
               <div
-                key={t.id}
-                className="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer"
-              >
-                <div className={`h-44 bg-gradient-to-br ${t.gradient} relative flex items-center justify-center`}>
-                  <span
-                    className="material-symbols-outlined text-white/20 text-[100px]"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    emoji_events
-                  </span>
-                  <div className="absolute top-4 left-4">
-                    <StatusBadge status={t.status} />
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-bold text-[17px] text-[#081C3A] mb-1.5">{t.name}</h3>
-                  <div className="flex items-center gap-4 text-[#4B5563] text-[12px] mb-4">
-                    <span className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px]">calendar_today</span>
-                      {t.startDate}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px]">location_on</span>
-                      {t.location}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-[11px] text-[#4B5563] mb-1">Teams Registered</p>
-                      <div className="flex items-center gap-2">
-                        <div className="h-1.5 w-24 bg-[#eceef0] rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-[#006c40] rounded-full"
-                            style={{ width: `${(t.teams / t.maxTeams) * 100}%` }}
-                          />
-                        </div>
-                        <span className="text-[12px] font-semibold text-[#081C3A]">{t.teams}/{t.maxTeams}</span>
-                      </div>
-                    </div>
-                    <Link
-                      to={`/tournaments/${t.id}`}
-                      className="px-4 py-2 bg-[#081C3A] text-white rounded-xl text-[12px] font-semibold hover:bg-[#006c40] transition-colors active:scale-95"
-                    >
-                      Register Now
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
+                className="w-full aspect-[4/3] bg-cover bg-center"
+                data-alt="A clean, minimalist UI dashboard preview showing professional cricket statistics."
+                style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLdvzbTePlQdGmt8BaGw5WMky26cgskdXv5SuQbOhTnRgIl2khV7cYARQJEtNrweW-9cEgySMty-acemVV4m9Z4KC9JE0TBPdzwRiJ3yQ0hNlLtPP7IpHAzmYSvRJFiPt5fVk9YxvliOsB2tkQ8M1ObtMGpacbcKWzRKGfjBwYnoMfPLsQicWAAYxzL1RpQzHegurfAjOI7UgHCpKbSyusim9GAZ1iLfSnJQ--N24P5NXfZWk7nQsGd5tMg80uoShm5J_ZgbTwMLd-')" }}
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Features Grid ────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1440px] mx-auto px-12">
-          <div className="text-center mb-14">
-            <h2 className="text-[32px] font-bold text-[#081C3A] mb-3">Powerful Features for Modern Sports</h2>
-            <p className="text-[#4B5563] max-w-2xl mx-auto text-[15px]">
-              Everything you need to manage professional sports events and tournaments on a single dashboard.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-            {features.map((f) => (
-              <div key={f.title} className="p-7 rounded-2xl bg-[#f7f9fb] border border-[#E2E8F0] hover:border-[#006c40]/30 hover:shadow-md transition-all duration-200 group">
-                <div className="w-13 h-13 rounded-xl bg-[#006c40]/10 flex items-center justify-center mb-5 group-hover:bg-[#006c40] transition-colors duration-200">
-                  <span className="material-symbols-outlined text-[#006c40] group-hover:text-white text-[24px] transition-colors duration-200" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    {f.icon}
-                  </span>
-                </div>
-                <h3 className="font-bold text-[16px] text-[#081C3A] mb-2">{f.title}</h3>
-                <p className="text-[#4B5563] text-[13px] leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Testimonials ─────────────────────────────────── */}
-      <section className="py-20 bg-[#f7f9fb]">
-        <div className="max-w-[1440px] mx-auto px-12">
-          <div className="text-center mb-14">
-            <h2 className="text-[32px] font-bold text-[#081C3A] mb-3">Trusted by India's Sports Community</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7 max-w-4xl mx-auto">
-            {testimonials.map((t) => (
-              <div key={t.name} className="bg-white p-8 rounded-2xl shadow-sm border border-[#E2E8F0]">
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <span key={i} className="material-symbols-outlined text-yellow-400 text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                  ))}
-                </div>
-                <p className="text-[#4B5563] text-[14px] leading-relaxed italic mb-6">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#006c40] to-[#0b8852] flex items-center justify-center text-white font-bold text-[14px]">
-                    {t.name[0]}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-[#081C3A] text-[13px]">{t.name}</p>
-                    <p className="text-[#4B5563] text-[11px]">{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA Banner ───────────────────────────────────── */}
-      <section className="py-20 bg-gradient-to-br from-[#081C3A] to-[#0d2a52]">
-        <div className="max-w-[1440px] mx-auto px-12 text-center">
-          <h2 className="text-[40px] font-black text-white mb-4">Ready to elevate your sports game?</h2>
-          <p className="text-white/65 text-[16px] mb-10 max-w-xl mx-auto">
-            Join over 1,200+ organizers and 50,000+ players across India on the most advanced sports management platform.
+      {/* Trusted By Section */}
+      <section className="py-20 bg-white border-y border-[#bdcabe]/20">
+        <div className="max-w-[1280px] mx-auto px-10">
+          <p className="text-center text-[12px] font-semibold text-[#3e4a41] uppercase tracking-[0.2em] mb-12">
+            Trusted by Global Sports Leaders
           </p>
-          <div className="flex justify-center gap-4 flex-wrap">
-            <Link to="/register" className="px-8 py-3.5 bg-[#0b8852] text-white rounded-xl font-bold text-[15px] hover:bg-[#006c40] transition-all active:scale-95">
-              Get Started for Free
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-12 items-center opacity-40 hover:opacity-100 transition-opacity duration-500">
+            <div className="h-10 w-full flex justify-center items-center">
+              <span className="font-bold text-xl text-[#3e4a41]">INDCRICKET</span>
+            </div>
+            <div className="h-10 w-full flex justify-center items-center">
+              <span className="font-bold text-xl text-[#3e4a41]">ELITE_FED</span>
+            </div>
+            <div className="h-10 w-full flex justify-center items-center">
+              <span className="font-bold text-xl text-[#3e4a41]">STATE_LEAGUE</span>
+            </div>
+            <div className="h-10 w-full flex justify-center items-center">
+              <span className="font-bold text-xl text-[#3e4a41]">PRO_SERIES</span>
+            </div>
+            <div className="h-10 w-full flex justify-center items-center">
+              <span className="font-bold text-xl text-[#3e4a41]">CHAMP_ZONE</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-24 max-w-[1280px] mx-auto px-10">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <h2 className="text-[30px] font-bold mb-6">Designed for Every Competitive Edge</h2>
+          <p className="text-[18px] text-[#3e4a41]">Everything you need to orchestrate world-class tournaments from a single, intuitive command center.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Live Scoring Card */}
+          <div className="bg-[#f8f9ff] p-10 rounded-[18px] shadow-md border border-[#bdcabe]/10 hover:-translate-y-2 transition-all duration-300 group">
+            <div className="h-14 w-14 rounded-xl bg-[#0b8852]/10 flex items-center justify-center mb-8 group-hover:bg-[#006c40] transition-colors">
+              <span className="material-symbols-outlined text-[#006c40] group-hover:text-white transition-colors" style={{ fontSize: '32px' }}>sensors</span>
+            </div>
+            <h3 className="text-[24px] font-bold mb-4">Live Scoring</h3>
+            <p className="text-[#3e4a41] mb-6 leading-relaxed">Broadcast real-time match data to millions with sub-second latency. Professional-grade ball-by-ball updates.</p>
+            <Link className="text-[#006c40] font-bold inline-flex items-center gap-2 hover:gap-4 transition-all" to="/dashboard">
+              Explore Engine <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </Link>
-            <Link to="/support" className="px-8 py-3.5 border-2 border-white/25 text-white rounded-xl font-bold text-[15px] hover:bg-white/10 transition-all active:scale-95">
-              Contact Sales
+          </div>
+          {/* Player Stats Card */}
+          <div className="bg-[#f8f9ff] p-10 rounded-[18px] shadow-md border border-[#bdcabe]/10 hover:-translate-y-2 transition-all duration-300 group">
+            <div className="h-14 w-14 rounded-xl bg-[#0b8852]/10 flex items-center justify-center mb-8 group-hover:bg-[#006c40] transition-colors">
+              <span className="material-symbols-outlined text-[#006c40] group-hover:text-white transition-colors" style={{ fontSize: '32px' }}>analytics</span>
+            </div>
+            <h3 className="text-[24px] font-bold mb-4">Player Stats</h3>
+            <p className="text-[#3e4a41] mb-6 leading-relaxed">Deep-dive into performance metrics. Automated profile building and historical data tracking for every athlete.</p>
+            <Link className="text-[#006c40] font-bold inline-flex items-center gap-2 hover:gap-4 transition-all" to="/analytics">
+              View Analytics <span className="material-symbols-outlined text-sm">arrow_forward</span>
+            </Link>
+          </div>
+          {/* Automated Scheduling Card */}
+          <div className="bg-[#f8f9ff] p-10 rounded-[18px] shadow-md border border-[#bdcabe]/10 hover:-translate-y-2 transition-all duration-300 group">
+            <div className="h-14 w-14 rounded-xl bg-[#0b8852]/10 flex items-center justify-center mb-8 group-hover:bg-[#006c40] transition-colors">
+              <span className="material-symbols-outlined text-[#006c40] group-hover:text-white transition-colors" style={{ fontSize: '32px' }}>calendar_month</span>
+            </div>
+            <h3 className="text-[24px] font-bold mb-4">Automated Scheduling</h3>
+            <p className="text-[#3e4a41] mb-6 leading-relaxed">Optimize venues and time-slots with our AI-driven scheduler. Resolve conflicts instantly with drag-and-drop ease.</p>
+            <Link className="text-[#006c40] font-bold inline-flex items-center gap-2 hover:gap-4 transition-all" to="/tournaments">
+              Learn Process <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── Footer ───────────────────────────────────────── */}
-      <footer className="bg-[#081C3A] border-t border-white/8 py-14">
-        <div className="max-w-[1440px] mx-auto px-12 grid grid-cols-2 md:grid-cols-4 gap-10">
-          <div className="col-span-2 md:col-span-1">
-            <p className="text-[22px] font-black text-[#72db9d] mb-3">SmartSportz.in</p>
-            <p className="text-white/45 text-[13px] leading-relaxed max-w-xs">
-              India's ultimate digital platform for sports tournament management and live sports tracking.
-            </p>
-          </div>
-          {[
-            { heading: 'Platform', links: ['Tournaments', 'Live Scores', 'Registration', 'Analytics'] },
-            { heading: 'Resources', links: ['Blog', 'Tournament Guidelines', 'Support Center', 'Careers'] },
-            { heading: 'Legal', links: ['About Us', 'Contact', 'Privacy Policy', 'Terms of Service'] },
-          ].map((col) => (
-            <div key={col.heading}>
-              <p className="text-white/80 font-semibold text-[13px] mb-4">{col.heading}</p>
-              <ul className="space-y-2.5">
-                {col.links.map((l) => (
-                  <li key={l}>
-                    <a href="#" className="text-white/40 text-[13px] hover:text-[#72db9d] transition-colors duration-200">{l}</a>
-                  </li>
-                ))}
+      {/* Live Preview Section */}
+      <section className="py-24 bg-[#eff4ff] overflow-hidden">
+        <div className="max-w-[1280px] mx-auto px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            <div className="lg:col-span-4 flex flex-col justify-center space-y-8">
+              <h2 className="text-[30px] font-bold text-[#0b1c30]">Real-Time Control</h2>
+              <p className="text-[14px] text-[#3e4a41]">Experience a command center that works as fast as the game itself. From instant results to dynamic leaderboards, control the pulse of your league.</p>
+              <ul className="space-y-4">
+                <li className="flex items-center gap-3 text-[14px] font-semibold text-[#0b1c30]">
+                  <span className="material-symbols-outlined text-[#006c40]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                  One-Click Result Processing
+                </li>
+                <li className="flex items-center gap-3 text-[14px] font-semibold text-[#0b1c30]">
+                  <span className="material-symbols-outlined text-[#006c40]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                  Live PDF Certificate Generation
+                </li>
+                <li className="flex items-center gap-3 text-[14px] font-semibold text-[#0b1c30]">
+                  <span className="material-symbols-outlined text-[#006c40]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                  Multi-Venue Syncing
+                </li>
               </ul>
             </div>
-          ))}
+            <div className="lg:col-span-8">
+              <div className="grid grid-cols-2 gap-4 h-[500px]">
+                <div className="bg-white rounded-2xl shadow-md overflow-hidden p-6 border border-[#bdcabe]/30">
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-[14px] font-semibold text-[#006c40]">LIVE STATS</span>
+                    <div className="bg-red-100 text-red-600 px-2 py-0.5 rounded text-[10px] font-bold">LIVE</div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 bg-[#eff4ff] p-3 rounded-xl">
+                      <div className="h-10 w-10 rounded-full bg-[#8ef8b7]"></div>
+                      <div className="flex-1">
+                        <div className="h-2 w-24 bg-[#3e4a41]/20 rounded"></div>
+                        <div className="h-1.5 w-16 bg-[#3e4a41]/10 rounded mt-1"></div>
+                      </div>
+                      <div className="font-bold text-[#006c40]">84*</div>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 rounded-xl border border-[#bdcabe]/10">
+                      <div className="h-10 w-10 rounded-full bg-[#dce2f7]"></div>
+                      <div className="flex-1">
+                        <div className="h-2 w-20 bg-[#3e4a41]/20 rounded"></div>
+                        <div className="h-1.5 w-12 bg-[#3e4a41]/10 rounded mt-1"></div>
+                      </div>
+                      <div className="font-bold text-[#3e4a41]">22</div>
+                    </div>
+                    <div className="pt-4 h-full">
+                      <div
+                        className="w-full h-32 rounded-lg bg-cover bg-center"
+                        data-alt="A sophisticated data visualization chart showing real-time player performance."
+                        style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4mL_jt7HMKCVXLhzEwoxwoOOBQzSj3kJ4PfKwrKxAhw8Shvb0wj3b9kJ_1LP8cX7rapRrf2CIf256oXk3Imc-CUFRPKgSxqfVxxo3QR_bCGw5tYydOq8hLnrKAzZC2jQd6S6MyebRLNb9IYbfBJbpU2j_guibBMwP4IcceIqVHuTp4D2AACx4irMNp58IUyGLN0KbfBFs-CVt4RRqPNfo3PAPDj_cVJFMHXD4OCxQpyxT6AxL9RQSR-Fxisuy6mkmdMot6aEkMY9D')" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4 h-full">
+                  <div className="h-[calc(50%-8px)] bg-[#006c40] text-white rounded-2xl p-6 relative overflow-hidden">
+                    <div className="relative z-10">
+                      <span className="text-[12px] text-white/70 uppercase">Tournament Reach</span>
+                      <div className="text-3xl font-bold mt-2">1.2M+</div>
+                      <p className="text-white/80 text-[12px] mt-1">Active Viewers</p>
+                    </div>
+                    <div className="absolute right-[-20px] bottom-[-20px] opacity-10">
+                      <span className="material-symbols-outlined text-[120px]">public</span>
+                    </div>
+                  </div>
+                  <div className="h-[calc(50%-8px)] bg-white rounded-2xl p-6 shadow-md border border-[#bdcabe]/30">
+                    <span className="text-[12px] text-[#3e4a41] uppercase">Recent Awards</span>
+                    <div className="mt-4 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-full bg-[#ffdad9] flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[#9e3e44] text-sm">stars</span>
+                        </div>
+                        <span className="text-[12px] font-semibold">Top Sports Tech '24</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-full bg-[#8ef8b7]/30 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[#006c40] text-sm">security</span>
+                        </div>
+                        <span className="text-[12px] font-semibold">ISO Certified Secure</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="max-w-[1440px] mx-auto px-12 mt-10 pt-6 border-t border-white/8 flex justify-between items-center">
-          <p className="text-white/30 text-[12px]">© 2024 SmartSportz.in. All rights reserved.</p>
-          <p className="text-white/30 text-[12px]">Made with ❤️ in India</p>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24">
+        <div className="max-w-[1280px] mx-auto px-10">
+          <div className="relative bg-[#006c40] rounded-[32px] overflow-hidden p-12 md:p-24 text-center">
+            <div className="absolute top-0 right-0 p-8 opacity-10 scale-150 rotate-12">
+              <span className="material-symbols-outlined text-[300px] text-white">sports_cricket</span>
+            </div>
+            <div className="relative z-10 max-w-2xl mx-auto space-y-8">
+              <h2 className="text-[30px] md:text-[48px] font-bold text-white leading-tight">Join the Elite Organizations Already Winning.</h2>
+              <p className="text-white/80 text-[18px]">Scale your tournament from local grounds to global stages with SmartSportz.in.</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                <Link to="/register" className="bg-white text-[#006c40] px-12 py-5 rounded-xl font-bold hover:bg-[#8ef8b7] transition-all shadow-xl text-[14px]">
+                  Get Started Now
+                </Link>
+                <Link to="/support" className="bg-transparent border-2 border-white text-white px-12 py-5 rounded-xl font-bold hover:bg-white/10 transition-all text-[14px]">
+                  Schedule a Consult
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-[#bdcabe]/30">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-[1280px] mx-auto px-10 py-20">
+          <div className="space-y-6">
+            <div className="text-[30px] font-bold text-[#006c40]">SmartSportz.in</div>
+            <p className="text-[14px] text-[#3e4a41] max-w-xs">The ultimate tournament orchestration platform for modern sports federations and leagues.</p>
+          </div>
+          <div>
+            <h4 className="text-[14px] font-semibold text-[#0b1c30] uppercase tracking-widest mb-6">Product</h4>
+            <ul className="space-y-4 text-[14px]">
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/tournaments">Tournaments</Link></li>
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/dashboard">Live Scores</Link></li>
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/leaderboard">Leaderboards</Link></li>
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/teams">Teams</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[14px] font-semibold text-[#0b1c30] uppercase tracking-widest mb-6">Company</h4>
+            <ul className="space-y-4 text-[14px]">
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/news">Blogs</Link></li>
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/sponsors">Sponsors</Link></li>
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/support">Contact</Link></li>
+              <li><a className="text-[#3e4a41] hover:text-[#006c40] transition-colors" href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[14px] font-semibold text-[#0b1c30] uppercase tracking-widest mb-6">Community</h4>
+            <ul className="space-y-4 text-[14px]">
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/players">Players</Link></li>
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/gallery">Gallery</Link></li>
+              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/faq">FAQ</Link></li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-[#bdcabe]/30 py-8">
+          <div className="max-w-[1280px] mx-auto px-10 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-[14px] text-[#3e4a41]">© 2024 SmartSportz.in. All rights reserved.</p>
+            <div className="flex gap-8 text-[12px]">
+              <a className="text-[#3e4a41] hover:text-[#006c40] transition-colors" href="#">Terms of Service</a>
+              <a className="text-[#3e4a41] hover:text-[#006c40] transition-colors" href="#">Security</a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
   );
 };
+export default LandingPage;

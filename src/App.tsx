@@ -11,6 +11,12 @@ import { Leaderboard }  from '@/pages/Leaderboard';
 import { News }         from '@/pages/News';
 import { Gallery }      from '@/pages/Gallery';
 import { Login }        from '@/pages/Login';
+import { Sports }       from '@/pages/Sports';
+import { Results }      from '@/pages/Results';
+import { Sponsors }     from '@/pages/Sponsors';
+import { FAQ }          from '@/pages/FAQ';
+import { Support }      from '@/pages/Support';
+import { Register }     from '@/pages/Register';
 
 function App() {
   return (
@@ -20,10 +26,16 @@ function App() {
           {/* Public full-width pages */}
           <Route index element={<LandingPage />} />
           <Route path="/login"    element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           {/* Inner pages (dual-nav layout) */}
           <Route path="/dashboard"   element={<Dashboard />} />
           <Route path="/tournaments" element={<Tournaments />} />
+          <Route path="/sports"      element={<Sports />} />
+          <Route path="/results"     element={<Results />} />
+          <Route path="/sponsors"    element={<Sponsors />} />
+          <Route path="/faq"         element={<FAQ />} />
+          <Route path="/support"     element={<Support />} />
           <Route path="/analytics"   element={<Analytics />} />
           <Route path="/players"     element={<Players />} />
           <Route path="/teams"       element={<Teams />} />
@@ -40,3 +52,4 @@ function App() {
 }
 
 export default App;
+
