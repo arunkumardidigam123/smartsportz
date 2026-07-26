@@ -90,7 +90,7 @@ export const Login: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="text-[12px] font-semibold text-[#081C3A] uppercase tracking-wider" htmlFor="password">Password</label>
-                <Link className="text-[12px] font-semibold text-[#006c40] hover:text-[#0b8852] transition-colors" to="/support">Forgot Password?</Link>
+                <Link className="text-[12px] font-semibold text-[#006c40] hover:text-[#0b8852] transition-colors" to="/forgot-password">Forgot Password?</Link>
               </div>
               <div className="relative group">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#4B5563] group-focus-within:text-[#006c40] transition-colors">lock</span>

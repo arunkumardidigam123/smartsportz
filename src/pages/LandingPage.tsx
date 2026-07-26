@@ -215,9 +215,9 @@ export const LandingPage: React.FC = () => {
             </div>
             <h3 className="text-[24px] font-bold mb-4">Automated Scheduling</h3>
             <p className="text-[#3e4a41] mb-6 leading-relaxed">Optimize venues and time-slots with our AI-driven scheduler. Resolve conflicts instantly with drag-and-drop ease.</p>
-            <Link className="text-[#006c40] font-bold inline-flex items-center gap-2 hover:gap-4 transition-all" to="/tournaments">
+            <a className="text-[#006c40] font-bold inline-flex items-center gap-2 hover:gap-4 transition-all" href="/html/tournament_listing_page/code.html">
               Learn Process <span className="material-symbols-outlined text-sm">arrow_forward</span>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -345,7 +345,7 @@ export const LandingPage: React.FC = () => {
           <div>
             <h4 className="text-[14px] font-semibold text-[#0b1c30] uppercase tracking-widest mb-6">Product</h4>
             <ul className="space-y-4 text-[14px]">
-              <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/tournaments">Tournaments</Link></li>
+              <li><a className="text-[#3e4a41] hover:text-[#006c40] transition-colors" href="/html/tournament_listing_page/code.html">Tournaments</a></li>
               <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/dashboard">Live Scores</Link></li>
               <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/leaderboard">Leaderboards</Link></li>
               <li><Link className="text-[#3e4a41] hover:text-[#006c40] transition-colors" to="/teams">Teams</Link></li>

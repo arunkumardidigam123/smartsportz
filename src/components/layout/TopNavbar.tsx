@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/store/appStore';
 
@@ -7,6 +7,12 @@ interface TopNavItem {
   name: string;
   path: string;
   pattern: RegExp;
+}
+
+interface ExternalNavItem {
+  name: string;
+  href: string;
+  external?: boolean;
 }
 
 const topNavItems: TopNavItem[] = [
@@ -19,6 +25,10 @@ const topNavItems: TopNavItem[] = [
   { name: 'Gallery',     path: '/gallery',      pattern: /^\/gallery/ },
   { name: 'Leaderboard', path: '/leaderboard',  pattern: /^\/leaderboard/ },
   { name: 'Sponsors',    path: '/sponsors',     pattern: /^\/sponsors/ },
+];
+
+const externalNavItems: ExternalNavItem[] = [
+  { name: 'Live Matches', href: '/live-matches' },
 ];
 
 /** Map route paths to page titles */
@@ -95,6 +105,27 @@ export const TopNavbar: React.FC = () => {
 
         {/* ── Center: Horizontal Nav Tabs ─────────────────── */}
         <nav className="hidden lg:flex items-center gap-0.5 overflow-x-auto no-scrollbar flex-1 justify-center max-w-2xl mx-auto">
+          {externalNavItems.map((item) => {
+            const isActive = location.pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={cn(
+                  'px-3 py-1.5 rounded-lg text-[12.5px] font-medium whitespace-nowrap',
+                  'transition-all duration-200 relative',
+                  isActive
+                    ? 'text-[#006c40] bg-[#006c40]/8 font-semibold'
+                    : 'text-[#4B5563] hover:text-[#006c40] hover:bg-[#006c40]/5'
+                )}
+              >
+                {item.name}
+                {isActive && (
+                  <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#006c40] rounded-full" />
+                )}
+              </Link>
+            );
+          })}
           {topNavItems.map((item) => {
             const isActive = item.pattern.test(location.pathname);
             return (
